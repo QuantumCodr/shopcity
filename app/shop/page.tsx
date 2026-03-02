@@ -8,6 +8,10 @@ import { useCartContext } from '@/components/shop/CartProvider'
 const products = [
   { id: '1', name: 'Premium Hoodie', description: 'Soft cotton blend hoodie.', price: 59, image: 'https://picsum.photos/400?1' },
   { id: '2', name: 'Minimal Sneakers', description: 'Comfort everyday sneakers.', price: 89, image: 'https://picsum.photos/400?2' },
+   { id: '3', name: 'Premium Hoodie', description: 'Soft cotton blend hoodie.', price: 59, image: 'https://picsum.photos/400?3' },
+  { id: '4', name: 'Minimal Sneakers', description: 'Comfort everyday sneakers.', price: 89, image: 'https://picsum.photos/400?4' },
+   { id: '5', name: 'Premium Hoodie', description: 'Soft cotton blend hoodie.', price: 59, image: 'https://picsum.photos/400?5' },
+  { id: '6', name: 'Minimal Sneakers', description: 'Comfort everyday sneakers.', price: 89, image: 'https://picsum.photos/400?6' },
 ]
 
 export default function ShopPage() {
@@ -17,20 +21,7 @@ export default function ShopPage() {
   return (
     <div className="space-y-8">
 
-      {/* Cart Button */}
-      <div className="flex justify-end">
-        <button
-          onClick={() => setOpen(true)}
-          className="relative bg-indigo-600 text-white px-4 py-2 rounded-lg"
-        >
-          Cart
-          {count > 0 && (
-            <span className="absolute -top-2 -right-2 bg-red-500 text-xs w-5 h-5 flex items-center justify-center rounded-full">
-              {count}
-            </span>
-          )}
-        </button>
-      </div>
+ 
 
       {/* Products */}
       <div className="flex flex-col gap-6 md:grid md:grid-cols-3 lg:grid-cols-4">
