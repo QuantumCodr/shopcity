@@ -1,116 +1,66 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { supabase } from '@/lib/supabaseClient'
+import { useCartContext } from '@/components/shop/CartProvider'
 
-type Product = {
-  id: string
-  name: string
-  price: number
-}
+const products = [
+  {
+    id: '1',
+    name: 'Premium Hoodie',
+    description: 'Soft cotton blend hoodie.',
+    price: 59,
+    image: 'https://picsum.photos/400?1',
+  },
+  {
+    id: '2',
+    name: 'Minimal Sneakers',
+    description: 'Comfort everyday sneakers.',
+    price: 89,
+    image: 'https://picsum.photos/400?2',
+  },
+]
 
 export default function ShopPage() {
-  const router = useRouter()
-  const [products, setProducts] = useState<Product[]>([])
-  const [cart, setCart] = useState<Product[]>([])
-  const [loading, setLoading] = useState(true)
-  const [userName, setUserName] = useState('')
-
-  useEffect(() => {
-    async function fetchUser() {
-      const { data: user } = await supabase.auth.getUser()
-      if (!user.user) {
-        router.push('/')
-        return
-      }
-      // Fetch profile
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('full_name, role')
-        .eq('id', user.user.id)
-        .single()
-      if (!profile || profile.role !== 'customer') {
-        router.push('/')
-        return
-      }
-      setUserName(profile.full_name)
-    }
-
-    async function fetchProducts() {
-      // TODO: Replace with real Supabase products table fetch
-      setProducts([
-        { id: '1', name: 'Apple', price: 3 },
-        { id: '2', name: 'Banana', price: 2 },
-        { id: '3', name: 'Orange', price: 4 },
-      ])
-    }
-
-    fetchUser().then(() => setLoading(false))
-    fetchProducts()
-  }, [router])
-
-  const addToCart = (product: Product) => setCart([...cart, product])
-  const removeFromCart = (productId: string) =>
-    setCart(cart.filter(p => p.id !== productId))
-
-  const total = cart.reduce((sum, p) => sum + p.price, 0)
-
-  if (loading) return <div className="p-6">Loading...</div>
+  const { addToCart } = useCartContext()
 
   return (
-    <div className="h-screen flex flex-col bg-slate-50">
-      <header className="bg-indigo-600 text-white py-4 px-6 shadow-md">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold">ShopCity</h1>
-          <span>Welcome, {userName}</span>
-        </div>
-      </header>
+    <div className="space-y-8">
+      <div className="flex flex-col md:grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {products.map((product) => (
+          <div
+            key={product.id}
+            className="bg-white rounded-xl shadow-md p-4 flex flex-col"
+          >
+            <div className="aspect-square rounded-lg overflow-hidden mb-4">
+              <img
+                src={product.image}
+                alt={product.name}
+                className="object-cover w-full h-full"
+              />
+            </div>
 
-      <main className="flex-1 flex flex-col md:flex-row p-6 gap-6">
-        {/* Products */}
-        <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {products.map(p => (
-            <div key={p.id} className="bg-white p-4 rounded-lg shadow">
-              <h2 className="font-semibold">{p.name}</h2>
-              <p className="text-gray-600">${p.price}</p>
+            <h3 className="font-semibold text-slate-800">
+              {product.name}
+            </h3>
+
+            <p className="text-sm text-slate-500 mb-3">
+              {product.description}
+            </p>
+
+            <div className="mt-auto flex justify-between items-center">
+              <span className="font-bold text-indigo-600">
+                ${product.price}
+              </span>
+
               <button
-                className="mt-2 bg-indigo-600 text-white py-1 px-3 rounded hover:bg-indigo-700"
-                onClick={() => addToCart(p)}
+                onClick={() => addToCart(product)}
+                className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
               >
-                Add to Cart
+                Add
               </button>
             </div>
-          ))}
-        </div>
-
-        {/* Cart */}
-        <div className="w-full md:w-80 bg-white p-4 rounded-lg shadow">
-          <h2 className="font-semibold mb-2">Your Cart</h2>
-          {cart.length === 0 && <p className="text-gray-500">No items yet</p>}
-          {cart.map(p => (
-            <div key={p.id} className="flex justify-between items-center mb-2">
-              <span>{p.name}</span>
-              <span>${p.price}</span>
-              <button
-                className="text-red-500"
-                onClick={() => removeFromCart(p.id)}
-              >
-                x
-              </button>
-            </div>
-          ))}
-          {cart.length > 0 && (
-            <>
-              <hr className="my-2" />
-              <p className="font-bold">Total: ${total}</p>
-              <button className="mt-2 w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">
-                Checkout
-              </button>
-            </>
-          )}
-        </div>
-      </main>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
