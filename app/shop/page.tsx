@@ -22,7 +22,6 @@ export default function ShopPage() {
     <div className="space-y-8">
 
  
-
       {/* Products */}
       <div className="flex flex-col gap-6 md:grid md:grid-cols-3 lg:grid-cols-4">
         {products.map((product) => (
