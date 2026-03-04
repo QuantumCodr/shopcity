@@ -26,15 +26,15 @@ export default function HomePage() {
     setMessage('')
   }, [mode])
 
- // Convert phone to email format for Supabase auth
+  // Convert phone to email format for Supabase auth
   const phoneToEmail = (phone: string) => {
-    let num = phone.replace(/^0/, '') // remove leading zero
-    return `${num}@shopcity.com` // change .local → .com
+    const num = phone.replace(/^0/, '')
+    return `${num}@shopcity.com`
   }
 
   const formatPhone = (input: string) => {
     if (!input.startsWith('+')) {
-      let num = input.replace(/^0/, '')
+      const num = input.replace(/^0/, '')
       return '+232' + num
     }
     return input
@@ -48,17 +48,19 @@ export default function HomePage() {
 
     try {
       if (mode === 'login') {
+        // LOGIN
         const { data, error } = await supabase.auth.signInWithPassword({
           email: formattedPhone + '@shopcity.local',
           password,
         })
         if (error) throw error
 
+        // Fetch user profile
         const { data: profile } = await supabase
           .from('profiles')
           .select('role')
           .eq('id', data.user?.id)
-          .single()
+          .maybeSingle()
 
         switch (profile?.role) {
           case 'customer':
@@ -77,24 +79,23 @@ export default function HomePage() {
             router.push('/shop')
         }
       } else if (mode === 'register') {
+        // REGISTER
         const { data, error } = await supabase.auth.signUp({
           email: formattedPhone + '@shopcity.local',
           password,
+          options: {
+            data: {
+              full_name: fullName,
+              phone: formattedPhone, // sent to trigger via raw_user_meta_data
+            },
+          },
         })
         if (error) throw error
-
-        await supabase.from('profiles').insert({
-          id: data.user?.id,
-          full_name: fullName,
-          phone: formattedPhone,
-          email: phoneToEmail(phone),
-          role: 'customer',
-        })
 
         setMessage('Account created successfully. You can now login.')
         setMode('login')
       } else if (mode === 'forgot') {
-        // Call API to generate OTP
+        // SEND OTP
         const res = await fetch('/api/send-otp', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -105,7 +106,7 @@ export default function HomePage() {
         setMessage('OTP sent to your phone.')
         setMode('reset')
       } else if (mode === 'reset') {
-        // Call API to verify OTP + update password
+        // VERIFY OTP & UPDATE PASSWORD
         const res = await fetch('/api/verify-otp', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -125,15 +126,14 @@ export default function HomePage() {
 
   return (
     <div className="h-screen flex flex-col bg-slate-50 overflow-hidden">
-
-      {/* SOLID NAVBAR */}
+      {/* NAVBAR */}
       <header className="bg-indigo-600 text-white py-4 px-6 shadow-md">
         <div className="max-w-6xl mx-auto">
           <h1 className="text-2xl font-bold">ShopCity</h1>
         </div>
       </header>
 
-      {/* TAGLINE BELOW NAVBAR */}
+      {/* TAGLINE */}
       <div className="text-center mt-6 px-4">
         <p className="text-lg text-slate-700">
           Simple. Fast. Reliable shopping experience.
@@ -141,10 +141,9 @@ export default function HomePage() {
       </div>
 
       {/* MAIN CONTENT */}
-      <main className="flex flex-1 items-start justify-center mt-10 px-4" >
+      <main className="flex flex-1 items-start justify-center mt-10 px-4">
         <div className="bg-white p-6 rounded-2xl shadow-xl w-full max-w-sm">
-
-          {/* Toggle */}
+          {/* MODE TOGGLE */}
           {mode !== 'reset' && (
             <div className="flex justify-center mb-4 text-sm font-medium">
               <button
@@ -171,15 +170,13 @@ export default function HomePage() {
             </div>
           )}
 
+          {/* MESSAGES */}
           {message && (
-            <div className="mb-3 text-center text-sm text-indigo-600">
-              {message}
-            </div>
+            <div className="mb-3 text-center text-sm text-indigo-600">{message}</div>
           )}
 
-          {/* Fixed Height Area */}
+          {/* FORM */}
           <div className="h-[300px] flex flex-col justify-between">
-
             <form onSubmit={handleAuth} className="flex flex-col space-y-3">
               {mode === 'register' && (
                 <input

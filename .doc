@@ -1,0 +1,122 @@
+🚀 Project Summary: Scalable Online Store Platform
+
+I am building a functional online store platform that sells premium third-party products. The goal is to launch quickly with a simple, reliable structure, while designing the system to scale later into a multi-store and multi-warehouse architecture.
+
+🎯 Core Objectives
+
+Launch fast (functional > perfect)
+
+Centralized control and tracking
+
+Role-based access (customer, admin, staff)
+
+Scalable to multiple stores and warehouses
+
+Intelligent order routing to the closest store
+
+🛒 Customer Flow
+
+Customer signs up / logs in
+
+Customer browses products
+
+Adds products to cart
+
+Proceeds to checkout
+
+Enters delivery address
+
+Makes payment
+
+Order is created and assigned to a store
+
+Store packs, labels, dispatches, and confirms delivery
+
+🏬 Business Flow
+
+Store receives assigned order
+
+Staff picks products from inventory
+
+Packages and labels order
+
+Dispatches for delivery
+
+Updates order status
+
+Central system tracks all activities
+
+🧠 Architecture Plan
+Tech Stack
+
+Next.js → Frontend + API routes + business logic
+
+Supabase → Authentication + PostgreSQL database + security (RLS)
+
+Stripe (later) → Payment processing
+
+Vercel → Hosting
+
+🗄 Core Database Structure
+
+profiles (linked to Supabase auth)
+
+stores
+
+products
+
+inventory
+
+orders
+
+order_items
+
+addresses
+
+System is centralized, but each order is assigned a store_id.
+
+🔐 Roles
+
+customer → Shop & track orders
+
+staff → Manage assigned store orders
+
+admin → Full system visibility
+
+Routing is handled after login using role-based redirection from a single authentication endpoint.
+
+🔮 Future Scalability
+
+The system must support:
+
+Multiple stores
+
+Multiple warehouses
+
+Automatic routing of orders to nearest store using latitude/longitude
+
+Inventory separation per store
+
+Centralized analytics and oversight
+
+Routing logic:
+
+Calculate customer location
+
+Determine nearest store
+
+Assign order automatically
+
+Fallback if inventory unavailable
+
+🧩 System Responsibility Split
+
+Supabase → Authentication, database, security policies
+
+Next.js → API endpoints, business logic, routing, UI
+
+Central database → All stores connected to one core system
+
+📌 Guiding Principle
+
+Keep it simple for launch, but architected so scaling requires adding data — not rewriting the system.

@@ -2,7 +2,7 @@
 
 import { createContext, useContext } from 'react'
 import { useCart } from './useCart'
-
+ 
 const CartContext = createContext<ReturnType<typeof useCart> | null>(null)
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
