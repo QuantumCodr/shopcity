@@ -45,12 +45,13 @@ export default function HomePage() {
     setMessage('')
     setLoading(true)
     const formattedPhone = formatPhone(phone)
+    const formattedEmail = phoneToEmail(phone)
 
     try {
       if (mode === 'login') {
         // LOGIN
         const { data, error } = await supabase.auth.signInWithPassword({
-          email: formattedPhone + '@shopcity.local',
+          email: formattedEmail,
           password,
         })
         if (error) throw error
@@ -81,7 +82,7 @@ export default function HomePage() {
       } else if (mode === 'register') {
         // REGISTER
         const { data, error } = await supabase.auth.signUp({
-          email: formattedPhone + '@shopcity.local',
+          email: formattedEmail,
           password,
           options: {
             data: {
@@ -176,7 +177,7 @@ export default function HomePage() {
           )}
 
           {/* FORM */}
-          <div className="h-[300px] flex flex-col justify-between">
+          <div className="h-75 flex flex-col justify-between">
             <form onSubmit={handleAuth} className="flex flex-col space-y-3">
               {mode === 'register' && (
                 <input

@@ -1,0 +1,50 @@
+my-nextjs-store/
+│
+├─ app/
+│   ├─ page.tsx                 # Home / landing page
+│   ├─ layout.tsx               # Global layout (header, footer, nav)
+│   ├─ globals.css              # Global styles
+│   │
+│   ├─ api/                     # API routes
+│   │   ├─ send-otp/            # OTP send API
+│   │   ├─ verify-otp/          # OTP verify API
+│   │   └─ ...                  # Future backend routes
+│   │
+│   ├─ data/                    # Hardcoded data for now
+│   │   └─ products.ts          # List of products, etc.
+│   │
+│   ├─ (shop)/                  # Shop route group
+│   │   ├─ page.tsx             # Shop landing page
+│   │   ├─ cart/page.tsx        # Cart page
+│   │   ├─ profile/page.tsx     # Profile page
+│   │   └─ orders/page.tsx      # Orders page
+│   │
+│   ├─ (fulfilment)/            # Fulfilment route group (future)
+│   │   └─ ...                  
+│   │
+│   ├─ (staff)/                 # Staff route group
+│   │   └─ ...                  
+│   │
+│   └─ (admin)/                 # Admin / super-admin dashboard
+│       └─ ...                  
+│
+├─ components/                  # Shared UI components
+│   ├─ shop/                     # Shop-specific components
+│   │   ├─ ProductCard.tsx
+│   │   ├─ CartItem.tsx
+│   │   └─ ...                  
+│   ├─ common/                   # Buttons, Modals, Inputs, etc.
+│   └─ layout/                   # Header, Footer, Nav components
+│
+├─ lib/                          # Supabase client, helpers
+│   └─ supabaseClient.ts
+│
+├─ types/                        # TypeScript types/interfaces
+│   └─ index.d.ts
+│
+├─ public/                       # Public assets
+│   └─ images/                   # Product images, icons, etc.
+│
+├─ package.json
+├─ package-lock.json
+└─ tsconfig.json
